@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useUser } from '../contexts/UserContext';
-import { Building2, CheckSquare, Square } from 'lucide-react';
+import { Building2, CheckSquare, Square, AlertTriangle } from 'lucide-react';
 
 const Login: React.FC = () => {
-  const { login } = useUser();
+  const { login, isConfigured } = useUser();
   const [rememberMe, setRememberMe] = useState(true);
 
   const handleLogin = () => {
@@ -25,36 +25,47 @@ const Login: React.FC = () => {
             <p className="text-slate-500 dark:text-slate-400">Secure Cloud Management System</p>
         </div>
 
-        <div className="border-t border-slate-200 dark:border-slate-700 pt-8 space-y-6">
-            <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-300">Sign in to access your data</h2>
-            
-            <button 
-                onClick={handleLogin}
-                className="w-full flex items-center justify-center gap-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold py-3 px-4 rounded-lg hover:bg-orange-50 dark:hover:bg-slate-600 transition duration-200 shadow-sm hover:shadow-md"
-            >
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-6 h-6" />
-                Sign in with Gmail
-            </button>
-
-            <div 
-                className="flex items-center justify-center gap-2 cursor-pointer select-none text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-                onClick={() => setRememberMe(!rememberMe)}
-            >
-                {rememberMe ? (
-                    <CheckSquare size={20} className="text-primary-600" />
-                ) : (
-                    <Square size={20} />
-                )}
-                <span className="text-sm font-medium">Remember my login</span>
+        {!isConfigured ? (
+          <div className="p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl text-amber-700 dark:text-amber-400 text-sm space-y-3">
+            <div className="flex items-center justify-center gap-2 font-bold">
+              <AlertTriangle size={20} />
+              <span>Configuration Required</span>
             </div>
-            
-            <p className="mt-6 text-xs text-slate-400 bg-slate-100 dark:bg-slate-900 p-2 rounded">
-                Note: You must configure your Firebase keys in <code>firebase.ts</code> for this to work.
+            <p>
+              Firebase API keys are missing. Please set your <code>VITE_FIREBASE_API_KEY</code> and other variables in your Netlify or local environment settings.
             </p>
-        </div>
+            <div className="text-xs opacity-80 text-left bg-white/50 dark:bg-black/20 p-2 rounded font-mono">
+              VITE_FIREBASE_API_KEY<br/>
+              VITE_FIREBASE_AUTH_DOMAIN<br/>
+              VITE_FIREBASE_PROJECT_ID
+            </div>
+          </div>
+        ) : (
+          <div className="border-t border-slate-200 dark:border-slate-700 pt-8 space-y-6">
+              <h2 className="text-lg font-semibold text-slate-700 dark:text-slate-300">Sign in to access your data</h2>
+              
+              <button 
+                  onClick={handleLogin}
+                  className="w-full flex items-center justify-center gap-3 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-semibold py-3 px-4 rounded-lg hover:bg-orange-50 dark:hover:bg-slate-600 transition duration-200 shadow-sm hover:shadow-md"
+              >
+                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-6 h-6" />
+                  Sign in with Gmail
+              </button>
+
+              <div 
+                  className="flex items-center justify-center gap-2 cursor-pointer select-none text-slate-600 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+                  onClick={() => setRememberMe(!rememberMe)}
+              >
+                  {rememberMe ? (
+                      <CheckSquare size={20} className="text-primary-600" />
+                  ) : (
+                      <Square size={20} />
+                  )}
+                  <span className="text-sm font-medium">Remember my login</span>
+              </div>
+          </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default Login;
+}; export default Login;

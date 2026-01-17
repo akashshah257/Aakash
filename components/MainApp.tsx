@@ -34,7 +34,7 @@ const MainApp: React.FC = () => {
   const handleShare = async () => {
     const shareData = {
       title: 'RAJHOJIYARI Management App',
-      text: 'Secure Cloud Management System for RAJHOJIYARI',
+      text: 'Secure Management System for RAJHOJIYARI',
       url: window.location.href,
     };
 
@@ -72,9 +72,9 @@ const MainApp: React.FC = () => {
   }> = ({ viewName, label, icon }) => (
     <button
       onClick={() => setActiveView(viewName)}
-      className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold rounded-full transition-all duration-200 ${
+      className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 text-sm font-bold rounded-2xl transition-all duration-300 ${
         activeView === viewName
-          ? 'bg-primary-600 text-white shadow-lg shadow-primary-600/30 ring-2 ring-white ring-opacity-50'
+          ? 'bg-primary-600 text-white shadow-xl'
           : 'text-slate-600 dark:text-slate-400 hover:bg-orange-100 dark:hover:bg-slate-700'
       }`}
     >
@@ -84,67 +84,53 @@ const MainApp: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-orange-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans selection:bg-primary-200 dark:selection:bg-primary-900 transition-colors duration-300">
-      {/* Fixed Top Bar */}
-      <header className="fixed top-0 left-0 w-full bg-white/80 dark:bg-slate-800/90 backdrop-blur-md shadow-sm z-50 border-b border-orange-100 dark:border-slate-700 transition-all">
-        <div className="container mx-auto px-4 py-3 flex items-center flex-wrap gap-4">
-          <div className="flex items-center gap-3 mr-auto">
-            <div className="bg-gradient-to-br from-primary-500 to-primary-700 p-2 rounded-xl shadow-md text-white">
+    <div className="min-h-screen bg-orange-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-sans transition-colors duration-300">
+      {/* Top Bar */}
+      <header className="fixed top-0 left-0 w-full bg-white dark:bg-slate-800 shadow-sm z-50 border-b border-orange-100 dark:border-slate-700">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="bg-primary-600 p-2 rounded-xl text-white">
                 <Building2 className="h-6 w-6" />
             </div>
             <div>
-                <h1 className="text-xl font-bold text-slate-800 dark:text-white tracking-tight leading-none">
+                <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">
                 RAJHOJIYARI
                 </h1>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">Management System</p>
+                <p className="text-[9px] text-slate-500 font-black uppercase tracking-[0.2em]">Management Suite</p>
             </div>
-          </div>
-          
-          <div className="hidden sm:flex flex-col items-end mr-2 px-3 border-r border-slate-200 dark:border-slate-700/50">
-            <span className="text-sm font-bold text-slate-700 dark:text-slate-200 tabular-nums leading-tight">
-              {currentTime.toLocaleTimeString()}
-            </span>
-            <span className="text-[10px] text-primary-600 dark:text-primary-400 font-bold uppercase tracking-wider">
-              {new NepaliDate(currentTime).format('YYYY MMMM DD, dddd')}
-            </span>
           </div>
 
           <div className="flex items-center gap-2">
+            <div className="hidden md:flex flex-col items-end mr-4">
+              <span className="text-sm font-black tabular-nums">{currentTime.toLocaleTimeString()}</span>
+              <span className="text-[10px] text-primary-600 font-black uppercase">{new NepaliDate(currentTime).format('YYYY MMMM DD')}</span>
+            </div>
             <button
               onClick={handleShare}
-              className="p-2 rounded-full bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-slate-600 transition-colors"
-              aria-label="Share App"
-              title="Share Application"
+              className="p-2.5 rounded-xl bg-blue-50 dark:bg-slate-700 text-blue-600 dark:text-blue-400 hover:bg-blue-100"
             >
               <Share2 size={20} />
             </button>
-
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-orange-100 dark:bg-slate-700 text-orange-600 dark:text-slate-300 hover:bg-orange-200 dark:hover:bg-slate-600 transition-colors"
-              aria-label="Toggle dark mode"
-              title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+              className="p-2.5 rounded-xl bg-orange-100 dark:bg-slate-700 text-orange-600 dark:text-slate-300 hover:bg-orange-200"
             >
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
           </div>
-
-          <nav className="flex items-center gap-2 p-1.5 bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 rounded-full order-last w-full sm:order-none sm:w-auto shadow-inner">
-            <NavButton viewName="employees" label="Employees" icon={<Users size={18} />} />
-            <NavButton viewName="collage" label="Collage" icon={<ClipboardList size={18} />} />
+        </div>
+        <div className="bg-slate-50 dark:bg-slate-900/50 p-2">
+          <nav className="container mx-auto flex gap-2">
+            <NavButton viewName="employees" label="Staff" icon={<Users size={18} />} />
+            <NavButton viewName="collage" label="Ledger" icon={<ClipboardList size={18} />} />
           </nav>
         </div>
       </header>
 
-      {/* Main Content - Added padding-top to account for fixed header */}
-      <main className="container mx-auto p-4 md:p-8 pt-28 sm:pt-24 max-w-7xl">
+      {/* Main Content */}
+      <main className="container mx-auto p-4 pt-32 md:pt-40 max-w-7xl">
         {renderView()}
       </main>
-
-      <footer className="text-center py-8 text-xs text-slate-500 border-t border-slate-200 dark:border-slate-800 mt-12">
-        <p className="mb-2 font-medium">RAJHOJIYARI Secure Management System</p>
-        <p className="opacity-75">Data Storage: <span className="text-primary-600 dark:text-primary-400 font-semibold">Local Device (Browser)</span></p>
-      </footer>
     </div>
   );
 };

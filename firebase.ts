@@ -1,35 +1,40 @@
-
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Vite requires environment variables to start with VITE_ 
-// They are accessed via import.meta.env
-const env = (import.meta as any).env;
-
-const firebaseConfig = {
-  apiKey: env?.VITE_FIREBASE_API_KEY,
-  authDomain: env?.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: env?.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: env?.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: env?.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: env?.VITE_FIREBASE_APP_ID
+// Safer environment variable access
+const getEnv = (key: string): string | undefined => {
+  try {
+    // Attempt to access from import.meta.env (Vite) or process.env (Node/Netlify)
+    const env = (import.meta as any).env || (window as any).process?.env;
+    return env ? env[key] : undefined;
+  } catch (e) {
+    return undefined;
+  }
 };
 
-// Check if critical config is missing (common on Netlify first-deploy)
+const firebaseConfig = {
+  apiKey: getEnv('VITE_FIREBASE_API_KEY'),
+  authDomain: getEnv('VITE_FIREBASE_AUTH_DOMAIN'),
+  projectId: getEnv('VITE_FIREBASE_PROJECT_ID'),
+  storageBucket: getEnv('VITE_FIREBASE_STORAGE_BUCKET'),
+  messagingSenderId: getEnv('VITE_FIREBASE_MESSAGING_SENDER_ID'),
+  appId: getEnv('VITE_FIREBASE_APP_ID')
+};
+
+// Check if critical config is missing
 const isConfigMissing = !firebaseConfig.apiKey || firebaseConfig.apiKey === 'placeholder-key';
 
 if (isConfigMissing && typeof window !== 'undefined') {
   console.warn(
     "RAJHOJIYARI: Firebase API Key is missing. \n" +
-    "Please set VITE_FIREBASE_API_KEY in your Netlify environment variables."
+    "Please set VITE_FIREBASE_API_KEY in your environment variables."
   );
 }
 
 // Initialize Firebase with a safety check
-let app;
+let app: any = null;
 try {
-  // Only attempt initialization if we have at least an API key
   if (!isConfigMissing) {
     app = initializeApp(firebaseConfig);
   }
@@ -37,7 +42,8 @@ try {
   console.error("Firebase initialization failed:", e);
 }
 
-// Initialize services with null checks for the rest of the app
+// Export services with null checks
 export const auth = app ? getAuth(app) : null;
 export const googleProvider = new GoogleAuthProvider();
 export const db = app ? getFirestore(app) : null;
+export { app as firebaseApp };

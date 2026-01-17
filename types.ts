@@ -1,4 +1,3 @@
-
 export type View = 'employees' | 'collage';
 
 export interface Employee {

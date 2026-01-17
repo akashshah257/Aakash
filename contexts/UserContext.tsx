@@ -1,5 +1,13 @@
 import React, { createContext, useContext, ReactNode, useEffect, useState } from 'react';
-import { User, signInWithPopup, signOut, onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence } from 'firebase/auth';
+import { 
+  User, 
+  signInWithPopup, 
+  signOut, 
+  onAuthStateChanged, 
+  setPersistence, 
+  browserLocalPersistence, 
+  browserSessionPersistence 
+} from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 
 interface UserContextType {
@@ -7,6 +15,7 @@ interface UserContextType {
   loading: boolean;
   login: (remember?: boolean) => Promise<void>;
   logout: () => Promise<void>;
+  isConfigured: boolean;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -16,6 +25,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!auth) {
+      console.warn("Auth not initialized. Skipping auth state listener.");
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
@@ -24,6 +39,11 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const login = async (remember: boolean = true) => {
+    if (!auth) {
+      alert("Firebase is not configured. Please add your API keys to the environment variables.");
+      return;
+    }
+
     try {
       // Set persistence based on user preference
       const persistenceType = remember ? browserLocalPersistence : browserSessionPersistence;
@@ -33,11 +53,12 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error("Error signing in with Google", error);
-      alert("Failed to sign in. Please check your Firebase configuration.");
+      alert("Failed to sign in. Please check your Firebase configuration and network connection.");
     }
   };
 
   const logout = async () => {
+    if (!auth) return;
     try {
       await signOut(auth);
     } catch (error) {
@@ -45,7 +66,13 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const value = { currentUser, loading, login, logout };
+  const value = { 
+    currentUser, 
+    loading, 
+    login, 
+    logout,
+    isConfigured: !!auth
+  };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
