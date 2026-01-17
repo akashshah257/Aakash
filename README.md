@@ -1,11 +1,53 @@
-<div align="center">
+# RAJHOJIYARI Management App
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+A comprehensive web application for managing employee attendance, salaries, and college delivery records.
 
-  <h1>Built with AI Studio</h2>
+## Features
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+*   **Employee Management**: Track daily attendance, calculate wages, manage advances, and generate monthly Excel salary reports.
+*   **Collage Delivery**: Track collage orders, payments, and delivery statuses.
+*   **Nepali Calendar Integration**: Full support for Bikram Sambat (BS) dates.
+*   **Excel Support**: Import bulk data and export reports using Excel (.xlsx).
+*   **Data Persistence**: Data is saved locally in the browser.
+*   **Responsive Design**: Works on Desktop and Mobile.
+*   **Themes**: Light and Dark mode support.
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+## Getting Started
 
-</div>
+### Prerequisites
+
+*   Node.js (v16 or higher) installed on your machine.
+
+### Installation
+
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/rajhojiyari-app.git
+    ```
+2.  Navigate to the project folder:
+    ```bash
+    cd rajhojiyari-app
+    ```
+3.  Install dependencies:
+    ```bash
+    npm install
+    ```
+
+### Running the App
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open your browser and visit `http://localhost:5173`.
+
+## Configuration
+
+### Firebase
+To use authentication features, update `firebase.ts` with your Firebase project configuration keys.
+
+## License
+
+Private - Internal Use for RAJHOJIYARI.
